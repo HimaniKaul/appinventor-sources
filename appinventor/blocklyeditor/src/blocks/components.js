@@ -481,10 +481,6 @@ Blockly.Blocks.component_event = {
     var types = {};
 
     componentDb.forEachInstance(function(instance) {
-      if (instance.typeName == 'Form') {
-        // We do not want to permit "any" event blocks for Form
-        return;
-      }
       types[instance.typeName] = true;
       componentDb.forEventInType(instance.typeName, function(_, eventName) {
         tb.push({
@@ -500,10 +496,14 @@ Blockly.Blocks.component_event = {
     });
 
     Object.keys(types).forEach(function(typeName) {
+      if (instance.typeName == 'Form') {
+        // We do not want to permit "any" event blocks for Form
+         return;
+       }
       componentDb.forEventInType(typeName, function(_, eventName) {
         tb.push({
           translatedName: Blockly.Msg.LANG_COMPONENT_BLOCK_GENERIC_EVENT_TITLE +
-            componentDb.getInternationalizedComponentType(typeName),
+          componentDb.getInternationalizedComponentType(typeName),
           mutatorAttributes: {
             component_type: typeName,
             is_generic: true,
@@ -512,7 +512,6 @@ Blockly.Blocks.component_event = {
         });
       });
     });
-
     return tb;
   },
   customContextMenu: function (options) {
